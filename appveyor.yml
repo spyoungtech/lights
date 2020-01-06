@@ -6,17 +6,20 @@ install:
       call venv\Scripts\activate.bat
       python -m pip install --upgrade pip
       python -m pip install --upgrade .
-      python -m pip install pyinstaller
+      python -m pip install pyinstaller wheel
       call deactivate
 
 build_script:
   - cmd: |
       call venv\Scripts\activate.bat
-      pyinstaller --onefile --name=lights lights\__init__.py
+      pyinstaller --onefile --distpath=bin\dist --workpath=bin\build --name=lights lights\__init__.py
+      python setup.py sdist bdist_wheel
       call deactivate
 
 artifacts:
   - name: dist
+    path: bin\dist\*
+  - name: wheel
     path: dist\*
 
 test: off
