@@ -30,13 +30,18 @@ class Lights(object):
     def brighter(self, increment=10, light=None, group=None):
         if light:
             l = self._lights[light]
-            l.brightness = l.brightness - increment
+            new_brightness = min(255, l.brightness + increment)
+            l.brightness = new_brightness
             return
         if group:
             g = self._bridge.groups[group]
-            g.brightness = g.brightness - increment
+
+            new_brightness = min(255, g.brightness + increment)
+            g.brightness = new_brightness
+            return
         for light in self._lights:
-            light.brightness = light.brightness + increment
+            new_brightness = min(255, light.brightness + increment)
+            light.brightness = new_brightness
 
     def dim(self, increment=10, light: int=None, group: int=None):
         """
@@ -54,13 +59,17 @@ class Lights(object):
         """
         if light:
             l = self._lights[light]
-            l.brightness = l.brightness - increment
+            new_brightness = max(0, l.brightness - increment)
+            l.brightness = new_brightness
             return
         if group:
             g = self._bridge.groups[group]
-            g.brightness = g.brightness - increment
+            new_brightness = max(0, g.brightness - increment)
+            g.brightness = new_brightness
+            return
         for light in self._lights:
-            light.brightness = light.brightness - increment
+            new_brightness = max(0, light.brightness - increment)
+            light.brightness = new_brightness
 
     def brightness(self, new_brightness=None, light=None, group=None):
         """
