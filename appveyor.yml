@@ -1,0 +1,41 @@
+version: '0.1.{build}'
+
+install:
+  - cmd: |
+      py -3.7 -m venv venv
+      call venv\Scripts\activate.bat
+      python -m pip install --upgrade pip
+      python -m pip install --upgrade .
+      python -m pip install pyinstaller
+      call deactivate
+
+build_script:
+  - cmd: |
+      call venv\Scripts\activate.bat
+      pyinstaller --name=lights lights\__init__.py
+      call deactivate
+
+artifacts:
+  - name: dist
+    path: dist\*
+
+test: off
+
+on_finish:
+  - cmd: |
+      venv\Scripts\activate.bat
+      IF DEFINED COVERALLS_REPO_TOKEN (python -m coverage) ELSE (echo skipping coveralls report for external pr)
+
+
+deploy_script:
+  - ps: |
+      if ($env:APPVEYOR_REPO_TAG -eq "true") {
+        py -3.7 -m venv deploy_venv
+        .\deploy_venv\Scripts\activate.ps1
+        python -m pip install --upgrade pip
+        pip install --upgrade wheel
+        pip install --upgrade twine
+        twine upload dist\*
+      } else {
+        echo "Skipping Deploy Because this is not a tagged commit"
+      }
