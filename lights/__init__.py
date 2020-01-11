@@ -11,8 +11,9 @@ COLORS = {
     'blue sky': (0.3773, 0.2514),
     'foliage': (0.3372, 0.4220),
     'bluish green': (0.2608, 0.3430),
-    'orange': (0.5060, 0.4070)
+    'orange': (0.5060, 0.4070),
 }
+
 
 class Lights(object):
     """
@@ -55,7 +56,7 @@ class Lights(object):
             new_brightness = min(255, light.brightness + increment)
             light.brightness = new_brightness
 
-    def dim(self, increment=10, light: int=None, group: int=None):
+    def dim(self, increment=10, light: int = None, group: int = None):
         """
         Dim the lights. A light or group can be specified. If no light or group is specified, dims all lights.
 
@@ -128,7 +129,9 @@ class Lights(object):
             l.xy = new_color
 
     def save(self, name):
-        data = {light.light_id: {'brightness': light.brightness, 'xy': light.xy, 'on': light.on} for light in self._lights}
+        data = {
+            light.light_id: {'brightness': light.brightness, 'xy': light.xy, 'on': light.on} for light in self._lights
+        }
         homedir = os.path.expanduser('~')
 
         profiles_directory = os.path.join(homedir, '.lights_profiles')
@@ -155,6 +158,7 @@ class Lights(object):
                 continue
             l.brightness = light_data['brightness']
             l.xy = light_data['xy']
+
 
 def main():
     fire.Fire(Lights)

@@ -3,12 +3,10 @@ quick scripts for controlling my phue lights from CLI
 
 ## Installation
 
-Clone the repo and install using pip
+Install using pip 
 
 ```
-git clone https://github.com/spyoungtech/lights.git
-cd lights
-pip install . 
+pip install lights
 ```
 
 ## Usage

@@ -8,7 +8,7 @@ with open('README.md', encoding='utf-8') as f:
 
 setup(
     name='lights',
-    version='0.0.1',
+    version='0.0.2',
     packages=['lights'],
     url='https://github.com/spyoungtech/lights',
     long_description=long_description,
@@ -21,7 +21,6 @@ setup(
     classifiers=[
         'Programming Language :: Python',
         'License :: OSI Approved :: MIT License',
-        'Operating System :: Microsoft :: Windows',
         'Programming Language :: Python :: 3 :: Only',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
