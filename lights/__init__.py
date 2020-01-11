@@ -1,6 +1,18 @@
+import os
+
 from phue import Bridge
 import fire
+import json
 
+COLORS = {
+    'blue': (0, 0),
+    'red': (1, 0),
+    'green': (0.5, 0.5),
+    'blue sky': (0.3773, 0.2514),
+    'foliage': (0.3372, 0.4220),
+    'bluish green': (0.2608, 0.3430),
+    'orange': (0.5060, 0.4070)
+}
 
 class Lights(object):
     """
@@ -99,6 +111,50 @@ class Lights(object):
         """
         for index, group in enumerate(self._bridge.groups):
             print(index, group)
+
+    def color(self, new_color, light=None, group=None):
+        if new_color in COLORS:
+            new_color = COLORS[new_color]
+
+        if light:
+            l = self._lights[light]
+            l.xy = new_color
+            return
+        if group:
+            g = self._bridge.groups[group]
+            g.xy = new_color
+            return
+        for l in self._lights:
+            l.xy = new_color
+
+    def save(self, name):
+        data = {light.light_id: {'brightness': light.brightness, 'xy': light.xy, 'on': light.on} for light in self._lights}
+        homedir = os.path.expanduser('~')
+
+        profiles_directory = os.path.join(homedir, '.lights_profiles')
+        if not os.path.exists(profiles_directory):
+            os.mkdir(profiles_directory)
+        profile_path = os.path.join(profiles_directory, name + '.json')
+        with open(profile_path, 'w') as f:
+            json.dump(data, f, indent=4)
+
+    def load(self, name):
+        homedir = os.path.expanduser('~')
+        profiles_directory = os.path.join(homedir, '.lights_profiles')
+        if not os.path.exists(profiles_directory):
+            os.mkdir(profiles_directory)
+        profile_path = os.path.join(profiles_directory, name + '.json')
+        with open(profile_path) as f:
+            data = json.load(f)
+        for l in self._lights:
+            light_data = data.get(str(l.light_id))
+            if not light_data:
+                continue
+            l.on = light_data['on']
+            if not l.on:
+                continue
+            l.brightness = light_data['brightness']
+            l.xy = light_data['xy']
 
 def main():
     fire.Fire(Lights)
