@@ -1,8 +1,16 @@
+import ast
+import collections
 import os
 
 from phue import Bridge
 import fire
 import json
+import logging
+import sys
+
+logger = logging.getLogger('Lights')
+logger.addHandler(logging.StreamHandler(sys.stdout))
+logger.setLevel(logging.INFO)
 
 COLORS = {
     'blue': (0, 0),
@@ -40,7 +48,7 @@ class Lights(object):
         for light in self._lights:
             light.on = False
 
-    def brighter(self, increment=10, light=None, group=None):
+    def brighter(self, increment=20, light=None, group=None):
         if light:
             l = self._lights[light]
             new_brightness = min(255, l.brightness + increment)
@@ -94,6 +102,17 @@ class Lights(object):
         :param group:
         :return:
         """
+        if light:
+            l = self._lights[light]
+            l.brightness = new_brightness
+            return
+        if group:
+            g = self._bridge.groups[group]
+            g.brightness = new_brightness
+            return
+
+        for light in self._lights:
+            light.brightness = new_brightness
 
     def list(self):
         """
@@ -114,7 +133,7 @@ class Lights(object):
             print(index, group)
 
     def color(self, new_color, light=None, group=None):
-        if new_color in COLORS:
+        if isinstance(new_color, type('')) and new_color in COLORS:
             new_color = COLORS[new_color]
 
         if light:
@@ -138,6 +157,7 @@ class Lights(object):
         if not os.path.exists(profiles_directory):
             os.mkdir(profiles_directory)
         profile_path = os.path.join(profiles_directory, name + '.json')
+        logger.info(f"Saving profile {name} to {profile_path}")
         with open(profile_path, 'w') as f:
             json.dump(data, f, indent=4)
 
