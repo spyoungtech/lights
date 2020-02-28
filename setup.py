@@ -8,7 +8,7 @@ with open('README.md', encoding='utf-8') as f:
 
 setup(
     name='lights',
-    version='0.0.2',
+    version='0.1.0',
     packages=['lights'],
     url='https://github.com/spyoungtech/lights',
     long_description=long_description,
