@@ -166,8 +166,12 @@ class Lights(object):
         homedir = os.path.expanduser('~')
         profiles_directory = os.path.join(homedir, '.lights_profiles')
         if not os.path.exists(profiles_directory):
-            os.mkdir(profiles_directory)
+            logger.fatal("No profiles found. Save a profile first")
+            sys.exit(1)
         profile_path = os.path.join(profiles_directory, name + '.json')
+        if not os.path.exists(profile_path):
+            logger.fatal(f"Profile {name} does not exist")
+            sys.exit(1)
         with open(profile_path) as f:
             data = json.load(f)
         for l in self._lights:
