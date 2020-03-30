@@ -8,7 +8,7 @@ with open('README.md', encoding='utf-8') as f:
 
 setup(
     name='lights',
-    version='0.1.0',
+    version='0.2.0',
     packages=['lights'],
     url='https://github.com/spyoungtech/lights',
     long_description=long_description,
@@ -27,6 +27,7 @@ setup(
     ],
     description='Command Line Utility for controlling phillips hue lights',
     entry_points={
-        'console_scripts': ['lights = lights.__init__:main']
+        'console_scripts': ['lights = lights.__init__:main'],
+        'gui_scripts': ['lightsw = lights.__init__:main']
     },
 )
