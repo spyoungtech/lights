@@ -13,7 +13,7 @@ build_script:
   - cmd: |
       call venv\Scripts\activate.bat
       pyinstaller --onefile --distpath=bin\dist --workpath=bin\build --name=lights lights\__init__.py
-      pyinstaller --onefile --distpath=bin\dist --workpath=bin\buildw --name=lightsw lights\__init__.py
+      pyinstaller --onefile --noconsole --distpath=bin\dist --workpath=bin\buildw --name=lightsw lights\__init__.py
       python setup.py sdist bdist_wheel
       call deactivate
 
